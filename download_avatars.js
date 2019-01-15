@@ -1,7 +1,10 @@
 var request = require('request');
 var secrets = require('./secrets');
 
-function getRepoContributors (repoOwner, repoName, callback) {
+(function getRepoContributors (callback = grabContributors) {
+  var repoOwner = process.argv[2];
+  var repoName = process.argv[3];
+
   var options = {
     url: `https://api.github.com/repos/${repoOwner}/${repoName}/contributors`,
 
@@ -14,14 +17,9 @@ function getRepoContributors (repoOwner, repoName, callback) {
     var contributors = JSON.parse(body);
     callback(contributors);
   });
-}
 
-getRepoContributors("jquery", "jquery", function(contributors, result) { 
-  contributors.forEach(function({login, avatar_url}) {
-    var fileName = `${login}.png`
-    downloadImageByUrl(avatar_url, fileName);
-  });
-});
+  return;
+})();
 
 function downloadImageByUrl(url, fileName) {
   var fs = require('fs');
@@ -46,4 +44,13 @@ function downloadImageByUrl(url, fileName) {
     .pipe(fs.createWriteStream(filePath));
 }
 
-downloadImageByUrl('https://avatars1.githubusercontent.com/u/43004?v=4', 'test2.png');
+function grabContributors (contributors, result) { 
+  
+  contributors.forEach( function({login, avatar_url}) {
+    var fileName = `${login}.png`;
+    downloadImageByUrl(avatar_url, fileName);
+  });
+
+  return;
+
+}
