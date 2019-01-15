@@ -5,6 +5,11 @@ var secrets = require('./secrets');
   var repoOwner = process.argv[2];
   var repoName = process.argv[3];
 
+  if(!repoOwner || !repoName) {
+    console.log('Both <owner> and <repo> arguments are reqired');
+    return;
+  }
+
   var options = {
     url: `https://api.github.com/repos/${repoOwner}/${repoName}/contributors`,
 
