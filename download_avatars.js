@@ -11,16 +11,15 @@ function getRepoContributors (repoOwner, repoName, callback) {
     }
   }
   request (options, function (error, response, body) {
-    var repos = JSON.parse(body);
-    
-    repos.forEach(function(repo) {
-      console.log(repo.avatar_url);
-    });
+    var contributors = JSON.parse(body);
+    callback(contributors);
   });
 }
 
-getRepoContributors("jquery", "jquery", function(error, result){ 
-  console.log(result);
+getRepoContributors("jquery", "jquery", function(contributors, result) { 
+  contributors.forEach(function(contributor) {
+    console.log(contributor.avatar_url);
+  });
 });
 
 console.log('Welcome to the GitHub Avatar Downloader');
