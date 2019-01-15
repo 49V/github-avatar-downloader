@@ -17,28 +17,32 @@ function getRepoContributors (repoOwner, repoName, callback) {
 }
 
 getRepoContributors("jquery", "jquery", function(contributors, result) { 
-  contributors.forEach(function(contributor) {
-    console.log(contributor.avatar_url);
+  contributors.forEach(function({login, avatar_url}) {
+    var fileName = `${login}.png`
+    downloadImageByUrl(avatar_url, fileName);
   });
 });
 
-function downloadImageByUrl(url, filePath) {
+function downloadImageByUrl(url, fileName) {
   var fs = require('fs');
+  var directory = './avatars'
   
-  // TODO: PARSE DIRECTORY!
-  // var directory;
+  var filePath = `${directory}/${fileName}`;
+  console.log(filePath);
 
-  // if(!fs.existsSync(directory)) {
-  //   fs.mkdirSync(directory);
-  // }
+  if(!fs.existsSync(directory)) {
+    fs.mkdirSync(directory);
+  }
 
   request.get(url)
     .on('error', function(err) {
       throw err;
     })
     .on('response', function(response) {
-      console.log('Response Status Code: ', response.statusCode);
-    })
+      if(response.statusCode !== 200){
+        console.log('Response Status Code: ', response.statusCode);
+      }
+      })
     .pipe(fs.createWriteStream(filePath));
 }
 
