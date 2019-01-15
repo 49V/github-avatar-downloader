@@ -22,4 +22,24 @@ getRepoContributors("jquery", "jquery", function(contributors, result) {
   });
 });
 
-console.log('Welcome to the GitHub Avatar Downloader');
+function downloadImageByUrl(url, filePath) {
+  var fs = require('fs');
+  
+  // TODO: PARSE DIRECTORY!
+  // var directory;
+
+  // if(!fs.existsSync(directory)) {
+  //   fs.mkdirSync(directory);
+  // }
+
+  request.get(url)
+    .on('error', function(err) {
+      throw err;
+    })
+    .on('response', function(response) {
+      console.log('Response Status Code: ', response.statusCode);
+    })
+    .pipe(fs.createWriteStream(filePath));
+}
+
+downloadImageByUrl('https://avatars1.githubusercontent.com/u/43004?v=4', 'test2.png');
